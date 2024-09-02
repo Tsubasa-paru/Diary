@@ -66,14 +66,13 @@ class DiaryViewModel @Inject constructor(
     private val _feedback = MutableStateFlow<String?>(null)
     val feedback: StateFlow<String?> = _feedback
 
-    fun generateFeedback(entryId: String) {
+    fun generateFeedback(entryIds: List<String>) {
         viewModelScope.launch {
-            val entry = diaryRepository.getEntryById(entryId)
+            val entries = entryIds.mapNotNull { id -> diaryRepository.getEntryById(id) }
             val settings = settingsRepository.getSettings().first()
-            entry?.let {
-                val feedbackContent = geminiClient.generateFeedback(it.content, settings)
-                _feedback.value = feedbackContent
-            }
+            val combinedContent = entries.joinToString("\n\n") { it.content }
+            val feedbackContent = geminiClient.generateFeedback(combinedContent, settings)
+            _feedback.value = feedbackContent
         }
     }
 }

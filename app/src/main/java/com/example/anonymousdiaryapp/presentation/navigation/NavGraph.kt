@@ -8,6 +8,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.anonymousdiaryapp.presentation.screens.DiaryScreen
 import com.example.anonymousdiaryapp.presentation.screens.SettingsScreen
 
+
 @Composable
 fun NavGraph(navController: NavHostController = rememberNavController()) {
     NavHost(navController = navController, startDestination = "diary") {
